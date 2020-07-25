@@ -2,8 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
+const mongoose = require('mongoose');
 
 const app = express();
+
+require('dotenv').config();
+const MONGO_USER = process.env.MONGO_USER;
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 
 const events = [];
 
@@ -46,15 +51,23 @@ app.use('/api', graphqlHTTP({
 		createEvent: (args) => {
 			const event = {
 				_id: Math.random().toString(),
-				title: args.title,
-				description: args.description,
-				price: +args.price,
-				date: new Date().toISOString()
+				title: args.eventInput.title,
+				description: args.eventInput.description,
+				price: +args.eventInput.price,
+				date: args.eventInput.date
 			};
 			events.push(event);
+			return event;
 		}
 	},
 	graphiql: true
 }));
 
-app.listen(8080);
+mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.y2hkq.mongodb.net/<dbname>?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+	.then(() => {
+		app.listen(8080);
+	})
+	.catch(err => {
+		console.log(err);
+	})
+
