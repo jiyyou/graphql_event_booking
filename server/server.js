@@ -9,8 +9,9 @@ const app = express();
 require('dotenv').config();
 const MONGO_USER = process.env.MONGO_USER;
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+const MONGO_DB = process.env.MONGO_DB;
 
-const events = [];
+const Event = require('./models/event');
 
 app.use(bodyParser.json());
 
@@ -49,21 +50,28 @@ app.use('/api', graphqlHTTP({
 			return events;
 		},
 		createEvent: (args) => {
-			const event = {
-				_id: Math.random().toString(),
+			const event = new Event({
 				title: args.eventInput.title,
 				description: args.eventInput.description,
 				price: +args.eventInput.price,
-				date: args.eventInput.date
-			};
-			events.push(event);
-			return event;
+				date: new Date(args.eventInput.date)
+			});
+			return event
+				.save()
+				.then(res => {
+					console.log(res);
+					return {...res._doc};
+				})
+				.catch(err => {
+					console.log(err);
+					throw err;
+				});
 		}
 	},
 	graphiql: true
 }));
 
-mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.y2hkq.mongodb.net/<dbname>?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.y2hkq.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
 		app.listen(8080);
 	})
