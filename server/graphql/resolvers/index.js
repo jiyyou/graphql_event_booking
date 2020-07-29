@@ -1,10 +1,9 @@
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken')
 //MODELS
 const Event = require('../../models/event');
 const User = require('../../models/user');
 const Booking = require('../../models/booking');
-
 
 const events = eventIds => {
 	return Event.find({_id: {$in: eventIds}})
@@ -54,7 +53,10 @@ module.exports = {
 				throw err;
 			});
 	},
-	bookings: (args) => {
+	bookings: (args, req) => {
+		if (!req.isAuth) {
+			throw new Error('Unauthenticated!');
+		}
 		return Booking.find()
 			.then(bookings => {
 				return bookings.map(booking => {
@@ -72,20 +74,37 @@ module.exports = {
 				throw err;
 			})
 	},
-	createEvent: (args) => {
+	login: async ({email, password}) => {
+		const currentUser = await User.findOne({ email: email });
+		if (!currentUser) {
+			throw new Error('User does not exist!');
+		}
+		const isEqual = await bcrypt.compare(password, currentUser.password);
+		if (!isEqual) {
+			throw new Error('Password is incorrect!');
+		}
+		const token = jwt.sign({userId: currentUser.id, email: currentUser.email}, 'jfelkawjfawfeiowajvwar1235f', {
+			expiresIn: '1h'
+		});
+		return { userId: currentUser.id, token: token, tokenExpiration: 1 }
+	},
+	createEvent: (args, req) => {
+		if (!req.isAuth) {
+			throw new Error('Unauthenticated!');
+		}
 		const event = new Event({
 			title: args.eventInput.title,
 			description: args.eventInput.description,
 			price: +args.eventInput.price,
 			date: new Date(args.eventInput.date),
-			creator: '5f1b828ebd151c48c32dfc09'
+			creator: req.userId
 		});
 		let createdEvent;
 		return event
 			.save()
 			.then(res => {
 				createdEvent = {...res._doc, date: new Date(event._doc.date).toISOString(), creator: user.bind(this, res._doc.creator)}
-				return User.findById('5f1b828ebd151c48c32dfc09')					
+				return User.findById(req.userId)					
 			})
 			.then(user => {
 				if (!user) {
@@ -125,11 +144,14 @@ module.exports = {
 			});
 
 	},
-	bookEvent: (args) => {
+	bookEvent: (args, req) => {
+		if (!req.isAuth) {
+			throw new Error('Unauthenticated!');
+		}
 		return Event.findOne({_id: args.eventId})
 			.then(fetchedEvent => {
 				const booking = new Booking({
-					user: '5f1b828ebd151c48c32dfc09',
+					user: req.userId,
 					event: fetchedEvent
 				})
 				return booking.save();
@@ -145,7 +167,10 @@ module.exports = {
 				};
 			})
 	},
-	cancelBooking: (args) => {
+	cancelBooking: (args, req) => {
+		if (!req.isAuth) {
+			throw new Error('Unauthenticated!');
+		}
 		return Booking.findById(args.bookingId)
 			.populate('event')
 			.then(booking => {
