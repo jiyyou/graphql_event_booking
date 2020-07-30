@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Main extends React.Components {
+class Main extends React.Component {
 	render() {
 		return (
 			<section>

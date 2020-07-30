@@ -15,6 +15,7 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const MONGO_DB = process.env.MONGO_DB;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use(isAuth);
 
