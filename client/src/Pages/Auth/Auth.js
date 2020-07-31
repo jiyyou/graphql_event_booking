@@ -20,22 +20,41 @@ class Auth extends React.Component {
 			email: e.target.email.value,
 			password: e.target.password.value
 		}, () => {
+
 			if (this.state.status === 'Signup') {
 				axios
-					.post('http://localhost:8080/api', {
+					.post('http://localhost:8080/api/', {
 						query: `
 							mutation {
-								createUser(userInput: {email: "${this.state.email}", password:"${this.state.password}"})
+								createUser(userInput: {email: "${this.state.email}", password:"${this.state.password}"}) {
+									_id
+									email
+								}
 							}
 						`
-					})	
+					})
+					.then(res => {
+						console.log(res.data.data.createUser);
+					})
+					.catch(err => {
+						window.alert(err);
+					})
 			}
 			else if (this.state.status === 'Login') {
 				axios
 					.post('http://localhost:8080/api', {
 						query: `
-
+							query {
+								login(email: "${this.state.email}", password: "${this.state.password}") {
+									userId
+									token
+									tokenExpiration
+								}
+							}
 						`
+					})
+					.then(res => {
+						console.log(res);
 					})
 			}
 			
@@ -43,7 +62,7 @@ class Auth extends React.Component {
 	}
 
 	//Click handler for changing between signup and login
-	clickHandler = () => {
+	statusHandler = () => {
 		if (this.state.status === 'Login') {
 			this.setState({
 				status: 'Signup'
@@ -60,7 +79,7 @@ class Auth extends React.Component {
 		return (
 			<section>
 				<SignUpForm status={this.state.status} submitHandler={this.submitHandler} />
-				<button onClick={this.clickHandler}>{this.state.status === 'Login' ? 'Switch to Signup' : 'Switch to Login'}</button>
+				<button onClick={this.statusHandler}>{this.state.status === 'Login' ? 'Switch to Signup' : 'Switch to Login'}</button>
 			</section>
 		);
 	}
