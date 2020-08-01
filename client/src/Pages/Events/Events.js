@@ -119,10 +119,10 @@ class Events extends React.Component {
 
 	render() {
 		return (
-			<section>
+			<section className='events'>
 				{this.context.token ? <button onClick={this.toggleCreate}>CREATE EVENT</button> : ''}				
 				{this.state.create === true ? <EventForm submitHandler={this.submitHandler} /> : ''}
-				<ul>
+				<ul className='events__list'>
 					{this.renderEvents()}
 				</ul>
 			</section>
