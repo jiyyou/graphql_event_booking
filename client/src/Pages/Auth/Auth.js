@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import SignUpForm from '../../Components/SignUpForm/SignUpForm';
+import AuthContext from '../../context/authContext';
 import './Auth.scss';
 
 class Auth extends React.Component {
@@ -9,6 +10,8 @@ class Auth extends React.Component {
 		password: '',
 		status: 'Login'
 	}
+
+	static contextType = AuthContext;
 
 	//Submit handler for login/signup
 	submitHandler = (e) => {
@@ -33,8 +36,11 @@ class Auth extends React.Component {
 							}
 						`
 					})
-					.then(res => {
-						console.log(res.data.data.createUser);
+					.then(res => {						
+						this.setState({
+							email: null,
+							password: null
+						})
 					})
 					.catch(err => {
 						window.alert(err);
@@ -54,11 +60,19 @@ class Auth extends React.Component {
 						`
 					})
 					.then(res => {
-						console.log(res);
+						this.context.login(
+							res.data.data.login.token,
+							res.data.data.login.userId,
+							res.data.data.login.tokenExpiration
+						)						
+					})
+					.catch(err => {
+						window.alert(err);
 					})
 			}
 			
 		})
+		e.target.reset();
 	}
 
 	//Click handler for changing between signup and login
