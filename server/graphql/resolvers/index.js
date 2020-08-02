@@ -57,7 +57,7 @@ module.exports = {
 		if (!req.isAuth) {
 			throw new Error('Unauthenticated!');
 		}
-		return Booking.find()
+		return Booking.find({user: req.userId})
 			.then(bookings => {
 				return bookings.map(booking => {
 					return {
@@ -160,8 +160,8 @@ module.exports = {
 				return {
 					...result._doc,
 					_id: result.id,
-					user: user.bind(this, booking._doc.user),
-					event: singleEvent.bind(this, booking._doc.event),
+					// user: user.bind(this, booking._doc.user),
+					// event: singleEvent.bind(this, booking._doc.event),
 					createdAt: new Date(result._doc.createdAt).toISOString(),
 					updatedAt: new Date(result._doc.updatedAt).toISOString()
 				};

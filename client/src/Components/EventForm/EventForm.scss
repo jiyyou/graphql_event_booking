@@ -1,0 +1,23 @@
+@import '../../partials/mixins';
+
+.eventForm {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+	padding: 1rem;
+	margin-top: 1rem;
+	width: 100%;
+	&__label {
+		margin-bottom: 0.5rem;
+	}
+	&__input {
+		width: 100%;
+		margin-bottom: 0.5rem;
+	}
+	&> button {
+		margin-top: 0.5rem;
+		width: 100%;
+		background-color: rgba(0,0,0,0);
+		border-radius: 5px;
+	}
+}

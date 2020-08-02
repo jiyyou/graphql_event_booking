@@ -105,14 +105,20 @@ class Events extends React.Component {
 		e.target.reset();
 	}
 
+	//Render events
 	renderEvents = () => {
 		return this.state.events.map(event => {
 			return <EventCard
 				key={event._id}
+				id={event._id}
 				title={event.title} 
 				description={event.description}
 				price={event.price}
 				date={event.date}
+				author={event.creator._id}
+				userId={this.context.userId}
+				bookingHandler={this.bookingHandler}
+				token={this.context.token}
 			/>	
 		})
 	}
