@@ -47,7 +47,11 @@ function EventCard(props) {
 				}
 			})
 			.then(res => {
+				props.eraseBooking(props.bookingId);
 				window.alert('Booking Canceled!')
+			})
+			.catch(err => {
+				window.alert(err);
 			})
 	}
 

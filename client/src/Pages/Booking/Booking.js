@@ -64,7 +64,20 @@ class Booking extends React.Component {
 				token={this.context.token}
 				status='booking'
 				bookingId={booking._id}
+				eraseBooking={this.eraseBooking}
 			/>	
+		})
+	}
+
+	//Cancel booking
+	eraseBooking = (bookingId) => {
+		const newBookings = this.state.bookings.filter(booking => {
+			if (bookingId !== booking._id) {
+				return booking;
+			}
+		})
+		this.setState({
+			bookings: newBookings
 		})
 	}
 
