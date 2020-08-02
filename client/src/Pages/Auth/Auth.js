@@ -40,7 +40,9 @@ class Auth extends React.Component {
 						this.setState({
 							email: null,
 							password: null
-						})
+						}, () => {
+							window.alert('Signup Successful!')							
+						})						
 					})
 					.catch(err => {
 						window.alert(err);
@@ -64,7 +66,11 @@ class Auth extends React.Component {
 							res.data.data.login.token,
 							res.data.data.login.userId,
 							res.data.data.login.tokenExpiration
-						)						
+						)
+						this.setState({
+							email: null,
+							password: null
+						})
 					})
 					.catch(err => {
 						window.alert(err);
@@ -91,7 +97,7 @@ class Auth extends React.Component {
 
 	render() {
 		return (
-			<section>
+			<section className='auth'>
 				<SignUpForm status={this.state.status} submitHandler={this.submitHandler} />
 				<button onClick={this.statusHandler}>{this.state.status === 'Login' ? 'Switch to Signup' : 'Switch to Login'}</button>
 			</section>

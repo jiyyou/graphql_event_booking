@@ -3,10 +3,12 @@
 .eventForm {
 	display: flex;
 	flex-direction: column;
-	border: 1px solid black;
+	border: 1px solid $vsilver;
+	border-radius: 5px;
 	padding: 1rem;
 	margin-top: 1rem;
 	width: 100%;
+	max-width: 490px;
 	&__label {
 		margin-bottom: 0.5rem;
 	}
@@ -16,8 +18,5 @@
 	}
 	&> button {
 		margin-top: 0.5rem;
-		width: 100%;
-		background-color: rgba(0,0,0,0);
-		border-radius: 5px;
 	}
 }

@@ -1,0 +1,17 @@
+@import '../../partials/mixins';
+
+.booking {
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	&> h2 {
+		font-weight: 500;
+	}
+	&> ul {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+}

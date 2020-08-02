@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import EventCard from '../../Components/EventCard/EventCard';
 import AuthContext from '../../context/authContext';
+import './Booking.scss';
 
 class Booking extends React.Component {
 	state = {
@@ -44,8 +45,6 @@ class Booking extends React.Component {
 			.then(res => {
 				this.setState({
 					bookings: res.data.data.bookings
-				}, () => {
-					console.log(this.state);
 				})
 			})
 	}
@@ -63,14 +62,16 @@ class Booking extends React.Component {
 				author={booking.event.creator._id}
 				userId={this.context.userId}
 				token={this.context.token}
+				status='booking'
+				bookingId={booking._id}
 			/>	
 		})
 	}
 
 	render() {
 		return (
-			<section>
-				{this.state.bookings === [] ? <h2>No Bookings!</h2> : ''}
+			<section className='booking'>
+				{this.state.bookings.length === 0 ? <h2>No Bookings!</h2> : ''}
 				<ul>
 					{this.renderEvents()}
 				</ul>

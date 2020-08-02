@@ -5,6 +5,7 @@
 	padding: 0;
 	margin: 0;
 	color: $vblack;
+	font-family: 'Poppins';
 	font-weight: 300;
 }
 html {
@@ -24,13 +25,35 @@ ul, li {
 }
 textarea {
 	resize: none;
+	height: 10rem;
+	padding: 0.5rem;
 }
 body {
 
 }
 button {
 	outline: none;
+	border: 2px solid $vorange;
+	border-radius: 5px;
+	font-weight: 500;
+	background-color: $vorange;
+	height: 2rem;
+	width: 100%;
+	max-width: 490px;
+	&:hover {
+		background-color: $vsalmon;
+		border: none;
+		color: white;
+	}
 }
 path {
 	color: $vblack;
+}
+input {
+	height: 2rem;
+	padding: 0.5rem;
+	
+}
+label {
+	font-weight: 500;
 }

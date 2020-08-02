@@ -9,7 +9,7 @@ function Header() {
 			{context => {
 				return (
 					<header className='header'>
-						<h1 className='header__title'>EZ-BOOK4U</h1>
+						<h1 className='header__title'>Easy Booking</h1>
 						<nav className='header__nav'>
 							{!context.token && 
 								<Link className='header__link' to={'/auth'}>

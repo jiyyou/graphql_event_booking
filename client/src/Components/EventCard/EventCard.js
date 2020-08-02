@@ -23,10 +23,31 @@ function EventCard(props) {
 				}
 			})
 			.then(res => {
-				console.log(res);
+				window.alert('Booking Successful!');
 			})
 			.catch(err => {
 				window.alert(err);
+			})
+	}
+
+	const bookingCancel = e => {
+		e.preventDefault();
+		axios
+			.post('http://localhost:8080/api/', {
+				query: `
+					mutation {
+						cancelBooking(bookingId: "${props.bookingId}") {
+							_id
+						}
+					}
+				`
+			}, {
+				headers: {
+					'Authorization': 'Bearer ' + props.token
+				}
+			})
+			.then(res => {
+				window.alert('Booking Canceled!')
 			})
 	}
 
@@ -36,7 +57,11 @@ function EventCard(props) {
 			<p className='eventCard__info'>{props.description}</p>
 			<p className='eventCard__info'>${props.price}</p>
 			<p className='eventCard__info'>{new Date(props.date).toLocaleDateString()}</p>
-			<button onClick={bookingHandler}>BOOK</button>
+			{props.token && props.status !== 'booking' ?
+				<button onClick={bookingHandler}>BOOK</button> :
+				<button onClick={bookingCancel}>CANCEL</button>
+			}
+			
 		</li>
 	);
 }
